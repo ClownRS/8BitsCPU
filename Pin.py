@@ -1,0 +1,101 @@
+# 引脚定义
+
+## 寄存器部分
+MSR = 1
+MAR = 2
+MDR = 3
+MC = 4
+IR = 5
+DST = 6
+SRC = 7
+
+A = 8
+B = 9
+C = 10
+D = 11
+DI = 12
+SI = 13
+SP = 14
+BP = 15
+
+CS = 16
+DS = 17
+SS = 18
+ES = 19
+VEC = 20
+T1 = 21
+T2 = 22
+
+### 读取控制
+MSR_OUT = MSR
+MAR_OUT = MAR
+MDR_OUT = MDR
+MC_OUT = MC
+IR_OUT = IR
+DST_OUT = DST
+SRC_OUT = SRC
+
+A_OUT = A
+B_OUT = B
+C_OUT = C
+D_OUT = D
+DI_OUT = DI
+SI_OUT = SI
+SP_OUT = SP
+BP_OUT = BP
+
+CS_OUT = CS
+DS_OUT = DS
+SS_OUT = SS
+ES_OUT = ES
+VEC_OUT = VEC
+T1_OUT = T1
+T2_OUT = T2
+
+### 写入控制
+_DST_SHIFT = 5
+
+MAR_IN = MAR << _DST_SHIFT
+MDR_IN = MDR << _DST_SHIFT
+MC_IN = MC << _DST_SHIFT
+IR_IN = IR << _DST_SHIFT
+DST_IN = DST << _DST_SHIFT
+SRC_IN = SRC << _DST_SHIFT
+
+A_IN = A << _DST_SHIFT
+B_IN = B << _DST_SHIFT
+C_IN = C << _DST_SHIFT
+D_IN = D << _DST_SHIFT
+DI_IN = DI << _DST_SHIFT
+SI_IN = SI << _DST_SHIFT
+SP_IN = SP << _DST_SHIFT
+BP_IN = BP << _DST_SHIFT
+
+CS_IN = CS << _DST_SHIFT
+DS_IN = DS << _DST_SHIFT
+SS_IN = SS << _DST_SHIFT
+ES_IN = ES << _DST_SHIFT
+VEC_IN = VEC << _DST_SHIFT
+T1_IN = T1 << _DST_SHIFT
+T2_IN = T2 << _DST_SHIFT
+
+SR = 1 << 10
+SW = 1 << 11
+DR = 1 << 12
+DW = 1 << 13
+
+## 内存PC控制
+PC_WE = 1 << 14
+PC_CS = 1 << 15
+PC_EN = 1 << 16
+
+PC_OUT = PC_CS
+PC_IN = PC_CS | PC_WE
+### PC正常自增
+PC_INC = PC_WE | PC_CS | PC_EN
+
+## ALU控制
+
+
+CYC = 1 << 30
+HLT = 1 << 31
