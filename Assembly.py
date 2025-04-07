@@ -43,6 +43,57 @@ INSTRUCTIONS = {
             (AM_REG, AM_IMM): [
                 SRC_OUT | DW,
             ],
+            (AM_REG, AM_REG): [
+                SR | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                SRC_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                SR | MC_IN
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | T1_IN,
+                DST_OUT | MAR_IN,
+                T1_OUT | MC_IN
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | T1_IN,
+                DST_OUT | MAR_IN,
+                T1_OUT | MC_IN
+            ],
+            (AM_IND, AM_IMM): [
+                DR | MAR_IN,
+                SRC_OUT | MC_IN
+            ],
+            (AM_IND, AM_REG): [
+                DR | MAR_IN,
+                SR | MC_IN
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | T1_IN,
+                DR | MAR_IN,
+                T1_OUT | MC_IN
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | T1_IN,
+                DR | MAR_IN,
+                T1_OUT | MC_IN
+            ]
         }
     },
     # 一地址指令

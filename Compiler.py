@@ -75,7 +75,7 @@ class Code(object):
             return AM_DIR
 
         # 间接寻址判断
-        elif re.match(r'^\[a-zA-Z]+\]$', am):
+        elif re.match(r'^\[[a-zA-Z]+\]$', am):
             return AM_IND
         else:
             raise SyntaxError(self.line_num, self.source)
@@ -83,15 +83,15 @@ class Code(object):
     # 获取操作数的机器编码
     def get_am(self, am_type, am):
         if am_type == AM_IMM:
-            return int(am)
+            return int(am, 16)
         elif am_type == AM_REG:
             return REGISTERS[am]
 
         elif am_type == AM_DIR:
-            return int(am)
+            return int(re.search(r'\[(.+)\]', am).group(1), 16)
 
         elif am_type == AM_IND:
-            return REGISTERS[am]
+            return REGISTERS[re.search(r'\[(.+)\]', am).group(1)]
         else:
             raise SyntaxError(self.line_num, self.source)
 
@@ -126,7 +126,6 @@ class Code(object):
         dst, src = 0x00, 0x00
         # 前8位指令
         ins_type = 0x00
-        ins = 0x000000
         # 获取目的操作数类型的机器编码
         if self.op_type != 0:
             dst_type = self.get_am_type(self.dst)
@@ -135,6 +134,22 @@ class Code(object):
             src_type = self.get_am_type(self.src)
             src = self.get_am(src_type, self.src)
 
+        # 检查操作数组合是否合法
+        if self.op_type == 2:
+            ams_type = (dst_type, src_type)
+            if ams_type not in INSTRUCTIONS[self.op_type][op]:
+                raise SyntaxError(self.line_num, self.source)
+        elif self.op_type == 1:
+            am_type = dst_type
+            if am_type not in INSTRUCTIONS[self.op_type][op]:
+                raise SyntaxError(self.line_num, self.source)
+        elif self.op_type == 0:
+            if op not in INSTRUCTIONS[self.op_type]:
+                raise SyntaxError(self.line_num, self.source)
+        else:
+            raise SyntaxError(self.line_num, self.source)
+
+        # 转换为机器编码
         if self.op_type == 2:
             ins_type = (op << ADDR2_SHIFT) | (dst_type << ADDR1_SHIFT) | src_type
         elif self.op_type == 1:

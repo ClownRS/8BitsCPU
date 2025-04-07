@@ -1,3 +1,9 @@
-MOV A, 11 
-; this is annotation
+MOV A, 22
+MOV B, 23
+MOV C, 24
+MOV D, 25
+MOV [A], 11
+MOV [B], A
+MOV [C], [26]
+MOV [D], [C]
 HLT
