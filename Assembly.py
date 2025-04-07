@@ -54,7 +54,7 @@ INSTRUCTIONS = {
             CYC,
         ],
         HLT: [
-            HLT,
+            HALT,
         ],
     },
 }

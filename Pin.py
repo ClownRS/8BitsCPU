@@ -98,4 +98,4 @@ PC_INC = PC_WE | PC_CS | PC_EN
 
 
 CYC = 1 << 30
-HLT = 1 << 31
+HALT = 1 << 31
