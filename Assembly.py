@@ -27,8 +27,15 @@ ADDR1_SHIFT = 2
 ## 二地址指令
 MOV = ADDR2 | 0x00
 ADD = ADDR2 | 0x01
+SUB = ADDR2 | 0x02
+AND = ADDR2 | 0x03
+OR = ADDR2 | 0x04
+XOR = ADDR2 | 0x05
 
 ## 一地址指令
+INC = ADDR1 | 0x00
+DEC = ADDR1 | 0x01
+NOT = ADDR1 | 0x02
 
 ## 零地址指令
 NOP = 0x00
@@ -94,10 +101,439 @@ INSTRUCTIONS = {
                 DR | MAR_IN,
                 T1_OUT | MC_IN
             ]
-        }
+        },
+        ADD: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_REG): [
+                SR | A_IN,
+                DR | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SRC_OUT | A_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SR | A_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_REG): [
+                SR | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | ADD_OP | PSW_OUT | MC_IN,
+            ]
+
+        },
+        SUB: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | B_IN,
+                DR | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_REG): [
+                SR | B_IN,
+                DR | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DR | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DR | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SRC_OUT | B_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SR | B_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_REG): [
+                SR | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | SUB_OP | PSW_OUT | MC_IN,
+            ]
+        },
+        AND: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | AND_OP | DW,
+            ],
+            (AM_REG, AM_REG): [
+                SR | A_IN,
+                DR | B_IN,
+                ALU_OUT | AND_OP | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | AND_OP | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | AND_OP | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SRC_OUT | A_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SR | A_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_IND, AM_REG): [
+                SR | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | AND_OP | MC_IN,
+            ]
+        },
+        OR: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | OR_OP | DW,
+            ],
+            (AM_REG, AM_REG): [
+                SR | A_IN,
+                DR | B_IN,
+                ALU_OUT | OR_OP | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | OR_OP | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | OR_OP | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SRC_OUT | A_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SR | A_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_IND, AM_REG): [
+                SR | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | OR_OP | MC_IN,
+            ]
+        },
+        XOR: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | XOR_OP | DW,
+            ],
+            (AM_REG, AM_REG): [
+                SR | A_IN,
+                DR | B_IN,
+                ALU_OUT | XOR_OP | DW,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | XOR_OP | DW,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | B_IN,
+                ALU_OUT | XOR_OP | DW,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SRC_OUT | A_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                SR | A_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_IND, AM_REG): [
+                SR | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | A_IN,
+                DR | MAR_IN,
+                MC_OUT | B_IN,
+                ALU_OUT | XOR_OP | MC_IN,
+            ]
+        },
     },
     # 一地址指令
     1: {
+        INC: {
+            AM_REG: [
+                DR | A_IN,
+                ALU_OUT | PSW_OUT | INC_OP | DW,
+            ],
+            AM_DIR: [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | PSW_OUT | INC_OP | MC_IN,
+            ],
+            AM_IND: [
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | PSW_OUT | INC_OP | MC_IN,
+            ]
+        },
+        DEC: {
+            AM_REG: [
+                DR | A_IN,
+                ALU_OUT | PSW_OUT | DEC_OP | DW,
+            ],
+            AM_DIR: [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | PSW_OUT | DEC_OP | MC_IN,
+            ],
+            AM_IND: [
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | PSW_OUT | DEC_OP | MC_IN,
+            ]
+        },
+        NOT: {
+            AM_REG: [
+                DR | A_IN,
+                ALU_OUT | NOT_OP | DW,
+            ],
+            AM_DIR: [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | NOT_OP | MC_IN,
+            ],
+            AM_IND: [
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                ALU_OUT | NOT_OP | MC_IN,
+            ]
+        }
     },
     # 零地址指令
     0: {

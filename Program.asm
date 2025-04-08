@@ -1,9 +1,5 @@
-MOV A, 22
-MOV B, 23
-MOV C, 24
-MOV D, 25
-MOV [A], 11
-MOV [B], A
-MOV [C], [26]
-MOV [D], [C]
+MOV C, 253
+INC C
+MOV D, 0
+DEC D
 HLT

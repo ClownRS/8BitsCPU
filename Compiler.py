@@ -15,6 +15,13 @@ program = []
 OPS = {
     'MOV': MOV,
     'ADD': ADD,
+    'SUB': SUB,
+    'INC': INC,
+    'DEC': DEC,
+    'AND': AND,
+    'OR': OR,
+    'XOR': XOR,
+    'NOT': NOT,
     'HLT': HLT,
     'NOP': NOP,
 }
@@ -67,15 +74,15 @@ class Code(object):
             return AM_IMM
 
         # 寄存器判断
-        elif re.match(r'^[a-zA-Z]+$', am):
+        elif re.match(r'^[a-zA-Z]$', am):
             return AM_REG
 
         # 直接寻址判断
-        elif re.match(r'^\[\d*\]$', am):
+        elif re.match(r'^\[\d+*\]$', am):
             return AM_DIR
 
         # 间接寻址判断
-        elif re.match(r'^\[[a-zA-Z]+\]$', am):
+        elif re.match(r'^\[[a-zA-Z]\]$', am):
             return AM_IND
         else:
             raise SyntaxError(self.line_num, self.source)
@@ -83,12 +90,12 @@ class Code(object):
     # 获取操作数的机器编码
     def get_am(self, am_type, am):
         if am_type == AM_IMM:
-            return int(am, 16)
+            return int(am, 10)
         elif am_type == AM_REG:
             return REGISTERS[am]
 
         elif am_type == AM_DIR:
-            return int(re.search(r'\[(.+)\]', am).group(1), 16)
+            return int(re.search(r'\[(.+)\]', am).group(1), 10)
 
         elif am_type == AM_IND:
             return REGISTERS[re.search(r'\[(.+)\]', am).group(1)]

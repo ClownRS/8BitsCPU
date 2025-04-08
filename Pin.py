@@ -95,7 +95,22 @@ PC_IN = PC_CS | PC_WE
 PC_INC = PC_WE | PC_CS | PC_EN
 
 ## ALU控制
+### OP
+_OP_SHIFT = 17
 
+# 添加_OP作为后缀，防止控制信号和命令机器编码名称混淆
+ADD_OP = 0 << _OP_SHIFT
+SUB_OP = 1 << _OP_SHIFT
+INC_OP = 2 << _OP_SHIFT
+DEC_OP = 3 << _OP_SHIFT
+AND_OP = 4 << _OP_SHIFT
+OR_OP = 5 << _OP_SHIFT
+XOR_OP = 6 << _OP_SHIFT
+NOT_OP = 7 << _OP_SHIFT
+
+### Control
+ALU_OUT = 1 << 20
+PSW_OUT = 1 << 21
 
 CYC = 1 << 30
 HALT = 1 << 31
