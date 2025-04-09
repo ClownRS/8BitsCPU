@@ -92,7 +92,7 @@ class Code(object):
     # 获取操作数类型的机器编码
     def get_am_type(self, am):
         # 立即数判断
-        if re.match(r'^\d+$', am):
+        if re.match(r'^\d+$', am) or re.match(r'^0x[\da-zA-Z]+$', am):
             return AM_IMM
 
         # 寄存器判断
@@ -100,7 +100,7 @@ class Code(object):
             return AM_REG
 
         # 直接寻址判断
-        elif re.match(r'^\[\d+\]$', am):
+        elif re.match(r'^\[\d+\]$', am) or re.match(r'^\[0x[\da-zA-Z]+\]$', am):
             return AM_DIR
 
         # 间接寻址判断
@@ -112,12 +112,18 @@ class Code(object):
     # 获取操作数的机器编码
     def get_am(self, am_type, am):
         if am_type == AM_IMM:
-            return int(am, 10)
+            if re.match(r'^\d+$', am):
+                return int(am, 10)
+            elif re.match(r'^0x[\da-zA-Z]+$', am):
+                return int(re.match(r'^(0x[\da-zA-Z]+)$', am).group(1), 16)
         elif am_type == AM_REG:
             return REGISTERS[am]
 
         elif am_type == AM_DIR:
-            return int(re.search(r'\[(.+)\]', am).group(1), 10)
+            if re.match(r'^\[\d+\]$', am):
+                return int(re.search(r'\[(.+)\]', am).group(1), 10)
+            elif re.match(r'^\[0x[\da-zA-Z]+\]$', am):
+                return int(re.match(r'^\[(0x[\da-zA-Z]+)\]$', am).group(1), 16)
 
         elif am_type == AM_IND:
             return REGISTERS[re.search(r'\[(.+)\]', am).group(1)]

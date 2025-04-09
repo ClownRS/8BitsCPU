@@ -1,13 +1,13 @@
-    MOV SS, 2
+    MOV SS, 0x02
     MOV CS, 0
-    MOV SP, 255
+    MOV SP, 0xFF
     MOV C, 255
     MOV D, 100
 
-    PUSH [100]
+    PUSH [0xEE]
     PUSH [C]
 
-    POP [250]
+    POP [0xFE]
     POP [D]
 
     HLT
