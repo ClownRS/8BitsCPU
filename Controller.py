@@ -40,6 +40,14 @@ def get_cjmps_exec(exec, ins, psw):
         return exec
     return [CYC]
 
+def get_int_exec(exec, ins, psw):
+    interrupt = (psw >> 3) & 0x1
+
+    if interrupt == 1:
+        return exec
+    
+    return [CYC]
+
 def compile_addr2(addr, ir, psw, index):
     global micro
 
@@ -77,6 +85,8 @@ def compile_addr1(addr, ir, psw, index):
     # 处理条件跳转指令，需要同时满足在OPS中和psw
     if ins in CJMPS:
         EXEC = get_cjmps_exec(EXEC, ins, psw)
+    if ins == INT:
+        EXEC = get_int_exec(EXEC, ins, psw)
     
     if index < len(EXEC):
         micro[addr] = EXEC[index]

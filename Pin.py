@@ -112,6 +112,11 @@ NOT_OP = 7 << _OP_SHIFT
 ### Control
 ALU_OUT = 1 << 20
 PSW_OUT = 1 << 21
+ALU_INT_W = 1 << 22
+ALU_INT = 1 << 23
+
+ALU_STI = ALU_INT_W
+ALU_CLI = ALU_INT_W | ALU_INT
 
 CYC = 1 << 30
 HALT = 1 << 31

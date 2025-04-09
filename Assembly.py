@@ -47,10 +47,14 @@ JNP = ADDR1 | 0x09
 PUSH = ADDR1 | 0x0A
 POP = ADDR1 | 0x0B
 CALL = ADDR1 | 0x0C
+INT = ADDR1 | 0x0D
 
 ## 零地址指令
 NOP = 0x00
 RET = 0x01
+IRET = 0x02
+STI = 0x03
+CLI = 0x04
 HLT = 0x3F
 
 INSTRUCTIONS = {
@@ -735,6 +739,17 @@ INSTRUCTIONS = {
                 ALU_OUT | DEC_OP | SP_IN,
                 CS_OUT | MSR_IN,
             ]
+        },
+        INT: {
+            AM_IMM: [
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                PC_OUT | MC_IN,
+                DST_OUT | PC_IN,
+                SP_OUT | A_IN,
+                ALU_OUT | DEC_OP | SP_IN,
+                CS_OUT | MSR_IN | ALU_CLI | PSW_OUT,
+            ]
         }
     },
     # 零地址指令
@@ -749,6 +764,20 @@ INSTRUCTIONS = {
             SP_OUT | MAR_IN,
             MC_OUT | PC_IN,
             CS_OUT | MSR_IN,
+        ],
+        IRET: [
+            SP_OUT | A_IN,
+            ALU_OUT | INC_OP | SP_IN,
+            SS_OUT | MSR_IN,
+            SP_OUT | MAR_IN,
+            MC_OUT | PC_IN,
+            CS_OUT | MSR_IN | ALU_STI | PSW_OUT,
+        ],
+        STI: [
+            ALU_STI | PSW_OUT,
+        ],
+        CLI: [
+            ALU_CLI | PSW_OUT,
         ],
         HLT: [
             HALT,

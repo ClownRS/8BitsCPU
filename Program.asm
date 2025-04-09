@@ -7,12 +7,13 @@ INIT:
 
 FUNC:
     MOV D, 255
-    RET
+    IRET
     
 START:
     MOV D, C
     INC C
-    CALL FUNC
+    CLI
+    INT FUNC
     CMP C, 0x8
     JZ END
     JMP START

@@ -39,6 +39,10 @@ OPS = {
     'POP': POP,
     'CALL': CALL,
     'RET': RET,
+    'INT': INT,
+    'IRET': IRET,
+    'STI': STI,
+    'CLI': CLI,
 }
 
 # 获取所有寻址类型
@@ -167,7 +171,7 @@ class Code(object):
             op = self.get_op()
             dst_type, src_type = 0b00, 0b00
             dst, src = 0x00, 0x00
-            if op in CJMPS or op == CALL:
+            if op in CJMPS or op == CALL or op == INT:
                 # 检查操作数是否合法
                 if self.src != None or self.dst == None:
                     raise SyntaxError(self.line_num, self.source)
