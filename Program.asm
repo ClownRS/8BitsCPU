@@ -1,5 +1,5 @@
-MOV C, 253
-INC C
-MOV D, 0
-DEC D
-HLT
+    MOV C, 1
+    INCREASE:
+        INC C
+        JMP INCREASE
+    HLT

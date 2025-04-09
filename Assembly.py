@@ -36,6 +36,7 @@ XOR = ADDR2 | 0x05
 INC = ADDR1 | 0x00
 DEC = ADDR1 | 0x01
 NOT = ADDR1 | 0x02
+JMP = ADDR1 | 0x03
 
 ## 零地址指令
 NOP = 0x00
@@ -532,6 +533,11 @@ INSTRUCTIONS = {
                 DR | MAR_IN,
                 MC_OUT | A_IN,
                 ALU_OUT | NOT_OP | MC_IN,
+            ]
+        },
+        JMP: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
             ]
         }
     },
