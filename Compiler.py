@@ -35,6 +35,8 @@ OPS = {
     'JP': JP,
     'JNP': JNP,
     'CMP': CMP,
+    'PUSH': PUSH,
+    'POP': POP,
 }
 
 # 获取所有寻址类型
@@ -45,11 +47,15 @@ AMS = {
     'AM_IND': AM_IND,
 }
 
+# 汇编层可访问的寄存器
 REGISTERS = {
     'A': A,
     'B': B,
     'C': C,
     'D': D,
+    'SS': SS,
+    'SP': SP,
+    'CS': CS,
 }
 
 class SyntaxError(Exception):
@@ -90,7 +96,7 @@ class Code(object):
             return AM_IMM
 
         # 寄存器判断
-        elif re.match(r'^[a-zA-Z]$', am):
+        elif am in REGISTERS:
             return AM_REG
 
         # 直接寻址判断
@@ -98,7 +104,7 @@ class Code(object):
             return AM_DIR
 
         # 间接寻址判断
-        elif re.match(r'^\[[a-zA-Z]\]$', am):
+        elif re.match(r'^\[[a-zA-Z]+\]$', am) and re.match(r'^\[([a-zA-Z]+)\]$', am).group(1) in REGISTERS:
             return AM_IND
         else:
             raise SyntaxError(self.line_num, self.source)

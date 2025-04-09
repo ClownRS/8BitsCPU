@@ -1,12 +1,13 @@
-MAIN:
-    MOV C, 1
-    MOV D, 2
+    MOV SS, 2
+    MOV CS, 0
+    MOV SP, 255
+    MOV C, 255
+    MOV D, 100
 
-    CMP C, D
-    JO MAX
-    JMP STOP
-MAX:
-    MOV A, 3
+    PUSH [100]
+    PUSH [C]
 
-STOP:
+    POP [250]
+    POP [D]
+
     HLT

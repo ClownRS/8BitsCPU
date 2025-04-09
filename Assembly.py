@@ -44,6 +44,8 @@ JZ = ADDR1 | 0x06
 JNZ = ADDR1 | 0x07
 JP = ADDR1 | 0x08
 JNP = ADDR1 | 0x09
+PUSH = ADDR1 | 0x0A
+POP = ADDR1 | 0x0B
 
 ## 零地址指令
 NOP = 0x00
@@ -651,6 +653,74 @@ INSTRUCTIONS = {
         JNP: {
             AM_IMM: [
                 DST_OUT | PC_IN,
+            ]
+        },
+        PUSH: {
+            AM_IMM: [
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                DST_OUT | MC_IN,
+                SP_OUT | A_IN,
+                ALU_OUT | DEC_OP | SP_IN,
+                CS_OUT | MSR_IN,
+            ],
+            AM_REG: [
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                DR | MC_IN,
+                SP_OUT | A_IN,
+                ALU_OUT | DEC_OP | SP_IN,
+                CS_OUT | MSR_IN,
+            ],
+            AM_DIR: [
+                DST_OUT | MAR_IN,
+                MC_OUT | T1_IN,
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                T1_OUT | MC_IN,
+                SP_OUT | A_IN,
+                ALU_OUT | DEC_OP | SP_IN,
+                CS_OUT | MSR_IN,
+            ],
+            AM_IND: [
+                DR | MAR_IN,
+                MC_OUT | T1_IN,
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                T1_OUT | MC_IN,
+                SP_OUT | A_IN,
+                ALU_OUT | DEC_OP | SP_IN,
+                CS_OUT | MSR_IN,
+            ]
+        },
+        POP: {
+            AM_REG: [
+                SP_OUT | A_IN,
+                ALU_OUT | INC_OP | SP_IN,
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                MC_OUT | DW,
+                CS_OUT | MSR_IN,
+            ],
+            AM_DIR: [
+                SP_OUT | A_IN,
+                ALU_OUT | INC_OP | SP_IN,
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                MC_OUT | T1_IN,
+                CS_OUT | MSR_IN,
+                DST_OUT | MAR_IN,
+                T1_OUT | MC_IN,
+            ],
+            AM_IND: [
+                SP_OUT | A_IN,
+                ALU_OUT | INC_OP | SP_IN,
+                SS_OUT | MSR_IN,
+                SP_OUT | MAR_IN,
+                MC_OUT | T1_IN,
+                CS_OUT | MSR_IN,
+                DR | MAR_IN,
+                T1_OUT | MC_IN,
             ]
         }
     },
