@@ -12,9 +12,21 @@ FUNC:
 START:
     MOV D, C
     INC C
+    JP CLI
+    JNP STI
+    JMP INTERRUPT 
+
+CLI:
     CLI
+    JMP INTERRUPT 
+
+STI:
+    STI
+    JMP INTERRUPT 
+
+INTERRUPT:
     INT FUNC
-    CMP C, 0x8
+    CMP C, 0xFF
     JZ END
     JMP START
 
