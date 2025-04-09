@@ -9,6 +9,37 @@ filename = os.path.join(dirname, 'Controller.bin')
 
 micro = [CYC for _ in range(0x10000)] # 将所有指令初始化为CYC
 
+CJMPS = [
+    JMP,
+    JO,
+    JNO,
+    JZ,
+    JNZ,
+    JP,
+    JNP,
+]
+
+def get_cjmps_exec(exec, ins, psw):
+    overflow = psw & 0x1
+    zero = (psw >> 1) & 0x1
+    parity = psw >> 2
+
+    if ins == JMP:
+        return exec
+    if ins == JO and overflow:
+        return exec
+    if ins == JNO and not overflow:
+        return exec
+    if ins == JZ and zero:
+        return exec
+    if ins == JNZ and not zero:
+        return exec
+    if ins == JP and parity:
+        return exec
+    if ins == JNP and not parity:
+        return exec
+    return [CYC]
+
 def compile_addr2(addr, ir, psw, index):
     global micro
 
@@ -41,9 +72,14 @@ def compile_addr1(addr, ir, psw, index):
     if ins_op not in INSTRUCTIONS[1][ins]:
         micro[addr] = CYC
         return
+
+    EXEC = INSTRUCTIONS[1][ins][ins_op]
+    # 处理条件跳转指令，需要同时满足在OPS中和psw
+    if ins in CJMPS:
+        EXEC = get_cjmps_exec(EXEC, ins, psw)
     
-    if index < len(INSTRUCTIONS[1][ins][ins_op]):
-        micro[addr] = INSTRUCTIONS[1][ins][ins_op][index]
+    if index < len(EXEC):
+        micro[addr] = EXEC[index]
 
 
 def compile_addr0(addr, ir, psw, index):
@@ -88,4 +124,4 @@ with open(filename, 'wb') as file:
         ins = var.to_bytes(4, byteorder='little') # 将micro的控制信号编码为2进制4字节数据
         file.write(ins)
 
-print("Compile Complete!")
+print("Controller Compile Complete!")

@@ -5,6 +5,7 @@ import re
 
 from Assembly import *
 from Pin import *
+from Controller import *
 
 dirname = os.path.dirname(__file__)
 sourceFile = os.path.join(dirname, 'Program.asm')
@@ -27,6 +28,13 @@ OPS = {
     'HLT': HLT,
     'NOP': NOP,
     'JMP': JMP,
+    'JO': JO,
+    'JNO': JNO,
+    'JZ': JZ,
+    'JNZ': JNZ,
+    'JP': JP,
+    'JNP': JNP,
+    'CMP': CMP,
 }
 
 # 获取所有寻址类型
@@ -86,7 +94,7 @@ class Code(object):
             return AM_REG
 
         # 直接寻址判断
-        elif re.match(r'^\[\d+*\]$', am):
+        elif re.match(r'^\[\d+\]$', am):
             return AM_DIR
 
         # 间接寻址判断
@@ -145,7 +153,11 @@ class Code(object):
             op = self.get_op()
             dst_type, src_type = 0b00, 0b00
             dst, src = 0x00, 0x00
-            if op == OPS['JMP']:
+            if op in CJMPS:
+                # 检查操作数是否合法
+                if self.src != None or self.dst == None:
+                    raise SyntaxError(self.line_num, self.source)
+
                 dst = marks[self.dst]
                 dst_type = AM_IMM
                 ins_type = (op << ADDR1_SHIFT) | dst_type
@@ -194,14 +206,14 @@ def compile_program():
         lines = file.readlines()
 
         for index, line in enumerate(lines):
+            source = line.strip()
             # 获取非空行
-            if not line:
+            if not source:
                 continue
 
-            source = line.strip()
             # 去掉注释
-            if ';' in line:
-                source = line.split(';')[0].strip()
+            if ';' in source:
+                source = source.split(';')[0].strip()
                 # 如果该行只有注释，跳过
                 if not source:
                     continue
@@ -239,7 +251,7 @@ def main():
     except SyntaxError as e:
         e.print_error()
         return
-    print("Compile Complete!")
+    print("Assembly Compile Complete!")
 
 if __name__ == "__main__":
     main()

@@ -31,12 +31,19 @@ SUB = ADDR2 | 0x02
 AND = ADDR2 | 0x03
 OR = ADDR2 | 0x04
 XOR = ADDR2 | 0x05
+CMP = ADDR2 | 0x06
 
 ## 一地址指令
 INC = ADDR1 | 0x00
 DEC = ADDR1 | 0x01
 NOT = ADDR1 | 0x02
 JMP = ADDR1 | 0x03
+JO = ADDR1 | 0x04
+JNO = ADDR1 | 0x05
+JZ = ADDR1 | 0x06
+JNZ = ADDR1 | 0x07
+JP = ADDR1 | 0x08
+JNP = ADDR1 | 0x09
 
 ## 零地址指令
 NOP = 0x00
@@ -484,6 +491,82 @@ INSTRUCTIONS = {
                 ALU_OUT | XOR_OP | MC_IN,
             ]
         },
+        CMP: {
+            (AM_REG, AM_IMM): [
+                SRC_OUT | B_IN,
+                DR | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_REG, AM_REG): [
+                SR | B_IN,
+                DR | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_REG, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DR | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_REG, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DR | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_DIR, AM_IMM): [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SRC_OUT | B_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_DIR, AM_REG): [
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SR | B_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_DIR, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_DIR, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DST_OUT | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_IND, AM_IMM): [
+                SRC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_IND, AM_REG): [
+                SR | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_IND, AM_DIR): [
+                SRC_OUT | MAR_IN,
+                MC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ],
+            (AM_IND, AM_IND): [
+                SR | MAR_IN,
+                MC_OUT | B_IN,
+                DR | MAR_IN,
+                MC_OUT | A_IN,
+                SUB_OP | PSW_OUT,
+            ]
+        }
     },
     # 一地址指令
     1: {
@@ -536,6 +619,36 @@ INSTRUCTIONS = {
             ]
         },
         JMP: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JO: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JNO: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JZ: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JNZ: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JP: {
+            AM_IMM: [
+                DST_OUT | PC_IN,
+            ]
+        },
+        JNP: {
             AM_IMM: [
                 DST_OUT | PC_IN,
             ]
